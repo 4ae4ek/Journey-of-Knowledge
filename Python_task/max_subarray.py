@@ -13,6 +13,15 @@ def max_sequence(arr):
     return max_sum if max_sum > 0 else 0
 
 
+def maxSequence(arr):
+    max, curr = 0, 0
+    for x in arr:
+        curr += x
+        if curr < 0: curr = 0
+        if curr > max: max = curr
+    return max
+
+
 def max_sequence_fast(items):
     iter_items = iter(items)
     try:
