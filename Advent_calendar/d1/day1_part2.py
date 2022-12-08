@@ -9,5 +9,5 @@ with open('input.txt', 'r') as f:
             continue
         else:
             summ += int(l.strip())
-
-print(max(mass))
+mass.sort()
+print(sum(mass[-3:]))
