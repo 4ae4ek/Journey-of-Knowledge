@@ -1,1 +1,1 @@
-print(2014 ** 14)
+print(int(True) // float(False))
