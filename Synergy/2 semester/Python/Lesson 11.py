@@ -1,3 +1,4 @@
+import collections
 import math
 
 
@@ -15,11 +16,10 @@ import math
 # То есть, результирующий список будет выглядеть в нашем примере так:
 # [720, 120, 24, 6, 2, 1]
 def task_1(num):
-    factor = math.factorial(num)
+    num = int(num)
     mass = list()
-    for i in range(factor, 0, -1):
+    for i in range(num, 0, -1):
         mass.append(math.factorial(i))
-        print(mass)
     return mass
 
 
@@ -114,8 +114,131 @@ def task_1(num):
 # возникать ошибка. Вам можно от неё избавиться, если правильно составить
 # проверочное условие. Здесь не потребуется использовать такие конструкции,
 # как try, except, чтобы обработать возникшую ошибку
+
+def get_pet(id, pets):
+    id = int(id)
+    return pets[id] if id in pets else False
+
+
+def get_suffix(age):
+    if age % 10 == 1 and age != 11 and age % 100 != 11:
+        year_case = 'год'
+    elif 1 < age % 10 <= 4 and age != 12 and age != 13 and age != 14:
+        year_case = 'года'
+    else:
+        year_case = 'лет'
+    return year_case
+
+
+def inf_change():
+    print('Введите имя питомца')
+    name = input()
+    print('Введите тип питомца')
+    type_pet = input()
+    print('Введите возраст питомца')
+    age = int(input())
+    print('Введите имя владельца')
+    owner_name = input()
+    pet = {
+        name: {
+            "Вид питомца": type_pet,
+            "Возраст питомца": age,
+            "Имя владельца": owner_name
+        }
+    }
+    return pet
+
+
+def create(pets):
+    try:
+        last = collections.deque(pets, maxlen=1)[0]
+    except:
+        last = 0
+    id = last + 1
+    pet = inf_change()
+    pets[id] = pet
+    print('Питомец успешно создан')
+
+
+def read(pets):
+    print('Введите all если хотите увидеть всех питомцев в виде id: Имя питомца или id питомца если хотите увидеть '
+          'информацию по питомцу под данным id')
+    option = input()
+    name = ''
+    if option == 'all':
+        for k, v in pets.items():
+            for ke, val in v.items():
+                name = ke
+            print(k, name)
+    else:
+        pet = get_pet(option, pets)
+        if pet:
+            # Получаем первый ключ из словаря
+            first_key = next(iter(pet))
+
+            # Получаем остальные данные по этому ключу
+            pet_info = pet[first_key]
+            print(
+                f'Это {pet_info["Вид питомца"]} по кличке {first_key}. Возраст питомца: {pet_info["Возраст питомца"]} {get_suffix(pet_info["Возраст питомца"])}. Имя владельца: {pet_info["Имя владельца"]}')
+        else:
+            print('Введена неправильный id или команда all')
+
+
+def update(pets):
+    print('Введите id питомца чтобы отредактировать его')
+    id = int(input())
+    pet = get_pet(id, pets)
+    if pet:
+        pet_new = inf_change()
+        pets[id] = pet_new
+        print('Питомец успешно изменен')
+    else:
+        print('Введен неверный id')
+
+
+def delete(pets):
+    print('Введите id питомца которого хотите удалить из списка')
+    id = int(input())
+    pet = get_pet(id, pets)
+    if pet:
+        del pets[id]
+        print('Питомец успешно удален')
+    else:
+        print('Питомца под данным id не существует')
+
+
 def task_2():
-    pass
+    pets = {
+        1: {
+            'Мухтар': {
+                "Вид питомца": "Собака",
+                "Возраст питомца": 9,
+                "Имя владельца": "Павел"
+            }
+        }
+    }
+    print("Добро пожаловать в супер-пупер БД!")
+    print("Список команд")
+    print('create - создание нового питомца')
+    print('update - изменение информации о питомце')
+    print('read - прочитать информацию из БД')
+    print('delete - удалить информацию о питомце')
+    print('stop - завершить программу')
+    command = ''
+    while command != 'stop':
+        command = input()
+        match command:
+            case 'create':
+                create(pets)
+            case 'update':
+                update(pets)
+            case 'read':
+                read(pets)
+            case 'delete':
+                delete(pets)
+            case _:
+                print('Введена неверная команда попробуйте еще раз')
 
 
-print(task_1(10))
+print(task_1(input()))
+task_2()
